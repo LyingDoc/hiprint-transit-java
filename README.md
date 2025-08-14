@@ -5,7 +5,7 @@
 `hiprint-transit-java` 是一个基于 node-hiprint-transit 基底开发，用于在 `electron-hiprint` 客户端和 `vue-plugin-hiprint` 库之间充当中转服务，实现这些组件之间的无缝连接和打印操作。
 
 <p align="center">
- <img src="https://img.shields.io/badge/SpringBoot-8-green.svg"/>
+ <img src="https://img.shields.io/badge/SpringBoot-2.7.18-green.svg"/>
  <img src="https://img.shields.io/badge/Java-8-blue.svg"/>
  <img src="https://img.shields.io/badge/SpringMVC-5.3.31.RELEASE-blue.svg"/>
 </p>
