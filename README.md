@@ -4,7 +4,11 @@
 
 `hiprint-transit-java` 是一个基于 node-hiprint-transit 基底开发，用于在 `electron-hiprint` 客户端和 `vue-plugin-hiprint` 库之间充当中转服务，实现这些组件之间的无缝连接和打印操作。
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Xavier9896/node-hiprint-transit)
+<p align="center">
+ <img src="https://img.shields.io/github/languages/count/lipengjun92/platform-wxshop?color=red"/>
+ <img src="https://img.shields.io/badge/Java-8-blue.svg"/>
+ <img src="https://img.shields.io/badge/SpringMVC-5.3.31.RELEASE-blue.svg"/>
+</p>
 
 
 ## 免费服务-用爱发电
@@ -28,7 +32,6 @@
 
 ### 1. 命令执行
 
-``` shell
  nohup java -Dname=hiprint-transporter.jar  -Duser.timezone=Asia/Shanghai -Xms512m -Xmx1024m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC -jar hiprint-transporter.jar --spring.config.location=config/application.yml 
 ```
 
