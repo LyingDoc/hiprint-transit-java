@@ -1,0 +1,9 @@
+server:
+  port: 18080
+spring:
+  profiles:
+    active: dev
+logging:
+  level:
+    org.xlet.hiprint: DEBUG
+    com.corundumstudio: INFO

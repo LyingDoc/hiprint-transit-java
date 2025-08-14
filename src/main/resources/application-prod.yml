@@ -1,0 +1,5 @@
+hiprint:
+  host: 0.0.0.0
+  port: 17521
+  epoll: false
+  auth-token: print_mes

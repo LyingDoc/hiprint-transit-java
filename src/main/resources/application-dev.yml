@@ -1,0 +1,5 @@
+hiprint:
+  host: 0.0.0.0
+  port: 18521
+  epoll: false
+  auth-token: hiprint
