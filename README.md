@@ -26,12 +26,13 @@
 
 
 
-```shell
+
 
 ##  使用 JDK 启动项目
 
 ### 1. 命令执行
 
+```shell
  nohup java -Dname=hiprint-transporter.jar  -Duser.timezone=Asia/Shanghai -Xms512m -Xmx1024m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC -jar hiprint-transporter.jar --spring.config.location=config/application.yml 
 ```
 
