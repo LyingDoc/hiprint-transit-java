@@ -120,11 +120,6 @@ public class SocketEventHandler implements AuthTokenListener {
         }
     }
 
-    private boolean isTest(SocketIOClient client) {
-        String test = client.getHandshakeData().getSingleUrlParam("test");
-        return StringUtils.equals(test, "true");
-    }
-
     @OnDisconnect
     public void onDisconnect(SocketIOClient client) {
         log.info("on disconnected: {}", client);
@@ -148,10 +143,6 @@ public class SocketEventHandler implements AuthTokenListener {
         log.info("clientInfo: {}", GsonUtils.toJson(clientInfo));
         HiPrintClient channel = getChannel(client);
         channel.setClient(clientInfo);
-    }
-
-    private HiPrintClient getChannel(SocketIOClient client) {
-        return client.get("_channel");
     }
 
     @OnEvent("printerList")
@@ -188,5 +179,14 @@ public class SocketEventHandler implements AuthTokenListener {
         }
     }
 
+    private boolean isTest(SocketIOClient client) {
+        String test = client.getHandshakeData().getSingleUrlParam("test");
+        return StringUtils.equals(test, "true");
+    }
+
+
+    private HiPrintClient getChannel(SocketIOClient client) {
+        return client.get("_channel");
+    }
 
 }
