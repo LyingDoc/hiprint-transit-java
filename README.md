@@ -7,7 +7,7 @@
 <p align="center">
  <img src="https://img.shields.io/badge/SpringBoot-2.7.18-green.svg"/>
  <img src="https://img.shields.io/badge/Java-8-blue.svg"/>
- <img src="https://img.shields.io/badge/SpringMVC-5.3.31.RELEASE-blue.svg"/>
+ <img src="https://img.shields.io/badge/SpringMVC-5.3.31-blue.svg"/>
  <img src="https://img.shields.io/badge/NettySocketio-2.0.13-red.svg"/>
 </p>
 
