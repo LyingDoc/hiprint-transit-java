@@ -45,8 +45,8 @@
 
 这将会引导你一步步完成初始化
 
-```yaml
 ./resources/application-prod.yml
+```yaml
 hiprint:
   host: 0.0.0.0
   # 服务端端口
@@ -58,6 +58,27 @@ hiprint:
 
 如果你的配置有误或需要调整修改端口、token值，只需要重启即可。
 （eg: 个人习惯都是把配置文件单独放在一个目录，方便修改）
+
+## events打印注意：
+
+1. 从 `hiwebSocket` 中发送 `news`、`render-print` 、`render-jpeg`、`render-pdf` ，目前参数接收为Object参数（其他参数会报错），
+2. `hiwebSocket`进行emit时对应提交事件名称(
+   参考文档[docs](https://gitee.com/CcSimple/vue-plugin-hiprint/blob/main/apiDoc.md#312-render-api-%E8%8E%B7%E5%8F%96-jpegpdf%E6%89%93%E5%8D%B0))
+
+**eg:**
+
+   ```js
+// java对应的注册事件注解中引用对应的是emit仲提交事件名称
+`@OnEvent("news")`, `@OnEvent("render-print")` , `@OnEvent("render-jpeg")`, `@OnEvent("render-pdf")`
+// hiwebSocket之间提交事件
+const socket = hiwebSocket.socket;
+socket.emit("render-jpeg", {
+    template: panel, // 模板对象
+    data: printData, // Object打印数据
+});
+   ```
+
+> 如果你不提供 client 中转服务将抛出一个 error
 
 ## Window 系统启动项目
 
