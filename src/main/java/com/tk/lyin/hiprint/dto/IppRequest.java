@@ -9,5 +9,6 @@ import java.util.Map;
 @Getter
 public class IppRequest {
     private String url;
+    private String replyId;
     private Map<String, Object> data;
 }
