@@ -138,12 +138,10 @@ public class SocketEventHandler implements AuthTokenListener {
         if (BooleanUtils.isFalse(testing)) {
             log.info("on disconnected: {} testing: {}", client, testing);
             // 清理客户端
-            String clientType = getClient(client);
             String sessionId = client.getSessionId().toString();
             String token = client.get("token");
-            if (StringUtils.equals(clientType, "electron-hiprint")) {
-                CLIENTS.remove(token, sessionId);
-            }
+            CLIENTS.remove(token, sessionId);
+
         }
     }
 
@@ -180,6 +178,7 @@ public class SocketEventHandler implements AuthTokenListener {
      */
     @OnEvent("getClientInfo")
     public void getClientInfo(SocketIOClient client) {
+        log.info("getClientInfo: {}", "获取中...");
         String token = client.get("token");
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("getClientInfo");
     }
@@ -192,6 +191,7 @@ public class SocketEventHandler implements AuthTokenListener {
      */
     @OnEvent("getPaperSizeInfo")
     public void getPaperSizeInfo(SocketIOClient client, String printer) {
+        log.info("getPaperSizeInfo：{}", printer);
         String token = client.get("token");
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("getPaperSizeInfo", printer);
     }
@@ -203,6 +203,7 @@ public class SocketEventHandler implements AuthTokenListener {
      */
     @OnEvent("refreshPrinterList")
     public void refreshPrinterList(SocketIOClient client) {
+        log.info("refreshPrinterList: {}", "打印机刷新获取中...");
         String token = client.get("token");
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("refreshPrinterList");
     }
@@ -228,8 +229,10 @@ public class SocketEventHandler implements AuthTokenListener {
      */
     @OnEvent("ippPrint")
     public void ippPrint(SocketIOClient client, IppPrint ippPrint) {
-        log.info("ippPrint: {}", GsonUtils.toJson(ippPrint));
         String token = client.get("token");
+        String sessionId = client.getSessionId().toString();
+        ippPrint.setReplyId(sessionId);
+        log.info("ippPrint: {}", GsonUtils.toJson(ippPrint));
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("ippPrint", ippPrint);
     }
 
@@ -241,8 +244,10 @@ public class SocketEventHandler implements AuthTokenListener {
      */
     @OnEvent("ippRequest")
     public void ippRequest(SocketIOClient client, IppRequest ippRequest) {
-        log.info("ippRequest: {}", GsonUtils.toJson(ippRequest));
+        String sessionId = client.getSessionId().toString();
+        ippRequest.setReplyId(sessionId);
         String token = client.get("token");
+        log.info("ippRequest: {}", GsonUtils.toJson(ippRequest));
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("ippRequest", ippRequest);
     }
 
@@ -260,6 +265,59 @@ public class SocketEventHandler implements AuthTokenListener {
             client.getNamespace().getRoomOperations(replyId).sendEvent("ippRequestCallback", packet, data);
         }
     }
+
+    /**
+     * 注册客户端请求 news打印任务
+     *
+     * @param client 客户端io
+     * @param data   news参数
+     */
+    @OnEvent("news")
+    public void news(SocketIOClient client, Object data) {
+        String token = client.get("token");
+        log.info("news: {}", GsonUtils.toJson(data));
+        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("news", data);
+    }
+
+    /**
+     * 注册客户端请求 render-print打印任务
+     *
+     * @param client 客户端io
+     * @param data   render-print参数
+     */
+    @OnEvent("render-print")
+    public void renderPrint(SocketIOClient client, Object data) {
+        String token = client.get("token");
+        log.info("renderPrint: {}", GsonUtils.toJson(data));
+        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-print", data);
+    }
+
+    /**
+     * 注册客户端请求 render-jpeg打印任务
+     *
+     * @param client 客户端io
+     * @param data   render-jpeg参数
+     */
+    @OnEvent("render-jpeg")
+    public void renderJpeg(SocketIOClient client, Object data) {
+        String token = client.get("token");
+        log.info("renderJpeg: {}", GsonUtils.toJson(data));
+        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("news", data);
+    }
+
+    /**
+     * 注册客户端请求 render-pdf打印任务
+     *
+     * @param client 客户端io
+     * @param data   render-pdf参数
+     */
+    @OnEvent("render-pdf")
+    public void renderPdf(SocketIOClient client, Object data) {
+        String token = client.get("token");
+        log.info("renderPdf: {}", GsonUtils.toJson(data));
+        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("news", data);
+    }
+
 
     // 检测是否为测试
     private boolean isTest(SocketIOClient client) {
