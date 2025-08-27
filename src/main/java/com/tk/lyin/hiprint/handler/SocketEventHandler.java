@@ -212,13 +212,13 @@ public class SocketEventHandler implements AuthTokenListener {
      * 注册客户端请求 address
      *
      * @param client      客户端io
-     * @param addressType ip、ipv6、mac、all === null
+     * @param data 地址参数集合
      */
     @OnEvent("address")
-    public void getAddress(SocketIOClient client, String addressType) {
-        log.info("addressType：{}", addressType);
+    public void getAddress(SocketIOClient client, Object... data) {
+        log.info("addressType：{}", data);
         String token = client.get("token");
-        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("address", addressType);
+        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("address", data);
     }
 
     /**
