@@ -130,7 +130,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 关闭客户端
      *
-     * @param client 客户端io
+     * @param client electron客户端io
      */
     @OnDisconnect
     public void onDisconnect(SocketIOClient client) {
@@ -148,7 +148,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端信息
      *
-     * @param client     客户端io
+     * @param client     electron客户端io
      * @param clientInfo 客户端详细信息
      */
     @OnEvent("clientInfo")
@@ -161,7 +161,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端打印机列表
      *
-     * @param client      客户端io
+     * @param client      electron客户端io
      * @param printerList 打印机列表
      */
     @OnEvent("printerList")
@@ -172,9 +172,22 @@ public class SocketEventHandler implements AuthTokenListener {
     }
 
     /**
+     * 注册客户端获取clients
+     *
+     * @param client web客户端io
+     */
+    @OnEvent("getClients")
+    public void getClients(SocketIOClient client) {
+        String token = client.get("token");
+        Map<String, HiPrintClient> clients = CLIENTS.row(token);
+        log.info("getClients: {}", GsonUtils.toJson(clients));
+        client.getNamespace().getRoomOperations(token + "_web-client").sendEvent("clients", clients);
+    }
+
+    /**
      * 注册客户端打印机列表
      *
-     * @param client 客户端io
+     * @param client  web客户端io
      */
     @OnEvent("getClientInfo")
     public void getClientInfo(SocketIOClient client) {
@@ -186,7 +199,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端获取纸张信息
      *
-     * @param client      客户端io
+     * @param client       web客户端io
      * @param printer     纸张参数
      */
     @OnEvent("getPaperSizeInfo")
@@ -199,7 +212,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端刷新打印机列表
      *
-     * @param client 客户端io
+     * @param client  web客户端io
      */
     @OnEvent("refreshPrinterList")
     public void refreshPrinterList(SocketIOClient client) {
@@ -211,8 +224,8 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 address
      *
-     * @param client      客户端io
-     * @param data 地址参数集合
+     * @param client  web客户端io
+     * @param data    地址参数集合
      */
     @OnEvent("address")
     public void getAddress(SocketIOClient client, Object... data) {
@@ -224,8 +237,8 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 ipp打印
      *
-     * @param client      客户端io
-     * @param ippPrint    ipp打印参数
+     * @param client     web客户端io
+     * @param ippPrint   ipp打印参数
      */
     @OnEvent("ippPrint")
     public void ippPrint(SocketIOClient client, IppPrint ippPrint) {
@@ -239,7 +252,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 ipp请求打印
      *
-     * @param client      客户端io
+     * @param client      web客户端io
      * @param ippRequest  ippRequest 打印参数
      */
     @OnEvent("ippRequest")
@@ -254,7 +267,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 ipp请求回调
      *
-     * @param client 客户端io
+     * @param client  electron客户端io
      * @param packet 房间参数
      * @param data   回调参数
      */
@@ -269,7 +282,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 news打印任务
      *
-     * @param client 客户端io
+     * @param client web客户端io
      * @param data   news参数
      */
     @OnEvent("news")
@@ -282,7 +295,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 render-print打印任务
      *
-     * @param client 客户端io
+     * @param client web客户端io
      * @param data   render-print参数
      */
     @OnEvent("render-print")
@@ -295,7 +308,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 render-jpeg打印任务
      *
-     * @param client 客户端io
+     * @param client web客户端io
      * @param data   render-jpeg参数
      */
     @OnEvent("render-jpeg")
@@ -308,7 +321,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 render-pdf打印任务
      *
-     * @param client 客户端io
+     * @param client web客户端io
      * @param data   render-pdf参数
      */
     @OnEvent("render-pdf")
