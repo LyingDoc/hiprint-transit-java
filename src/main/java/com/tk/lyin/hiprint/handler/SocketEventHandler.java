@@ -38,12 +38,6 @@ public class SocketEventHandler implements AuthTokenListener {
     // guava table <token, sessionId, SocketIOClient>
     private static final Table<String, String, HiPrintClient> CLIENTS = Tables.newCustomTable(Maps.newConcurrentMap(), Maps::newConcurrentMap);
 
-
-    // 获取客户端
-    private static String getClient(SocketIOClient c) {
-        return c.getHandshakeData().getSingleUrlParam("client");
-    }
-
     @OnConnect
     @SneakyThrows
     public void onConnect(SocketIOClient client) {
@@ -141,7 +135,6 @@ public class SocketEventHandler implements AuthTokenListener {
             String sessionId = client.getSessionId().toString();
             String token = client.get("token");
             CLIENTS.remove(token, sessionId);
-
         }
     }
 
@@ -305,6 +298,11 @@ public class SocketEventHandler implements AuthTokenListener {
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-print", data);
     }
 
+    // 获取客户端
+    private static String getClient(SocketIOClient c) {
+        return c.getHandshakeData().getSingleUrlParam("client");
+    }
+
     /**
      * 注册客户端请求 render-jpeg打印任务
      *
@@ -315,7 +313,14 @@ public class SocketEventHandler implements AuthTokenListener {
     public void renderJpeg(SocketIOClient client, Object data) {
         String token = client.get("token");
         log.info("renderJpeg: {}", GsonUtils.toJson(data));
-        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("news", data);
+        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-jpeg", data);
+    }
+
+
+    // 检测是否为测试
+    private boolean isTest(SocketIOClient client) {
+        String test = client.getHandshakeData().getSingleUrlParam("test");
+        return StringUtils.equals(test, "true");
     }
 
     /**
@@ -328,14 +333,7 @@ public class SocketEventHandler implements AuthTokenListener {
     public void renderPdf(SocketIOClient client, Object data) {
         String token = client.get("token");
         log.info("renderPdf: {}", GsonUtils.toJson(data));
-        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("news", data);
-    }
-
-
-    // 检测是否为测试
-    private boolean isTest(SocketIOClient client) {
-        String test = client.getHandshakeData().getSingleUrlParam("test");
-        return StringUtils.equals(test, "true");
+        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-pdf", data);
     }
 
     // 获取channel

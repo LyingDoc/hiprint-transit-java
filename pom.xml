@@ -18,9 +18,9 @@
 
     <properties>
         <guava.version>33.4.8-jre</guava.version>
-        <netty.version>4.2.3.Final</netty.version>
+        <netty.version>4.2.4.Final</netty.version>
         <commons-lang3.version>3.18.0</commons-lang3.version>
-        <commons-io.version>2.19.0</commons-io.version>
+        <commons-io.version>2.20.0</commons-io.version>
         <netty-socketio.version>2.0.13</netty-socketio.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
