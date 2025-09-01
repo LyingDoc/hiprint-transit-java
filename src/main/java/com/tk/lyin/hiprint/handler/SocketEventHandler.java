@@ -298,11 +298,6 @@ public class SocketEventHandler implements AuthTokenListener {
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-print", data);
     }
 
-    // 获取客户端
-    private static String getClient(SocketIOClient c) {
-        return c.getHandshakeData().getSingleUrlParam("client");
-    }
-
     /**
      * 注册客户端请求 render-jpeg打印任务
      *
@@ -314,13 +309,6 @@ public class SocketEventHandler implements AuthTokenListener {
         String token = client.get("token");
         log.info("renderJpeg: {}", GsonUtils.toJson(data));
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-jpeg", data);
-    }
-
-
-    // 检测是否为测试
-    private boolean isTest(SocketIOClient client) {
-        String test = client.getHandshakeData().getSingleUrlParam("test");
-        return StringUtils.equals(test, "true");
     }
 
     /**
@@ -336,6 +324,16 @@ public class SocketEventHandler implements AuthTokenListener {
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-pdf", data);
     }
 
+    // 获取客户端
+    private static String getClient(SocketIOClient c) {
+        return c.getHandshakeData().getSingleUrlParam("client");
+    }
+
+    // 检测是否为测试
+    private boolean isTest(SocketIOClient client) {
+        String test = client.getHandshakeData().getSingleUrlParam("test");
+        return StringUtils.equals(test, "true");
+    }
     // 获取channel
     private HiPrintClient getChannel(SocketIOClient client) {
         return client.get("_channel");
