@@ -258,6 +258,35 @@ public class SocketEventHandler implements AuthTokenListener {
     }
 
     /**
+     * 注册客户端请求 ipp printer连接
+     *
+     * @param client electron客户端io
+     * @param packet 房间参数
+     */
+    @OnEvent("ippPrinterConnected")
+    public void ippPrinterConnected(SocketIOClient client, ReplyPacket packet) {
+        String replyId = packet.getReplyId();
+        IppPrint.Opt printer = packet.getPrinter();
+        if (StringUtils.isNotEmpty(replyId) && printer != null) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("ippPrinterConnected", printer);
+        }
+    }
+
+    /**
+     * 注册客户端请求 ipp回调
+     *
+     * @param client electron客户端io
+     * @param packet 房间参数
+     * @param data   回调参数
+     */
+    @OnEvent("ippPrinterCallback")
+    public void ippPrinterCallback(SocketIOClient client, ReplyPacket packet, Object data) {
+        String replyId = packet.getReplyId();
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("ippPrinterCallback", packet, data);
+        }
+    }
+    /**
      * 注册客户端请求 ipp请求回调
      *
      * @param client  electron客户端io
@@ -324,6 +353,127 @@ public class SocketEventHandler implements AuthTokenListener {
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("render-pdf", data);
     }
 
+    /**
+     * 注册客户端请求 成功回调
+     *
+     * @param client electron客户端io
+     * @param result 成功参数
+     */
+    @OnEvent("success")
+    public void success(SocketIOClient client, Result result) {
+        ;
+        log.info("success: {}", GsonUtils.toJson(result));
+        String replyId = result.getReplyId();
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("success", result);
+        }
+    }
+
+    /**
+     * 注册客户端请求 失败回调
+     *
+     * @param client electron客户端io
+     * @param result 错误参数
+     */
+    @OnEvent("error")
+    public void error(SocketIOClient client, Result result) {
+        log.info("error: {}", GsonUtils.toJson(result));
+        String replyId = result.getReplyId();
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("error", result);
+        }
+    }
+
+    /**
+     * 注册客户端请求 render-print成功回调
+     *
+     * @param client electron客户端io
+     * @param result 回调参数
+     */
+    @OnEvent("render-print-success")
+    public void renderPrintSuccess(SocketIOClient client, Result result) {
+        String replyId = result.getReplyId();
+        log.info("renderPrintSuccess: {}", GsonUtils.toJson(result));
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("render-print-success", result);
+        }
+    }
+
+    /**
+     * 注册客户端请求 render-jpeg成功回调
+     *
+     * @param client electron客户端io
+     * @param result 回调参数
+     */
+    @OnEvent("render-jpeg-success")
+    public void renderJpegSuccess(SocketIOClient client, Result result) {
+        String replyId = result.getReplyId();
+        log.info("renderJpegSuccess: {}", GsonUtils.toJson(result));
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("render-jpeg-success", result);
+        }
+    }
+
+    /**
+     * 注册客户端请求 render-pdf成功回调
+     *
+     * @param client electron客户端io
+     * @param result 回调参数
+     */
+    @OnEvent("render-pdf-success")
+    public void renderPdfSuccess(SocketIOClient client, Result result) {
+        String replyId = result.getReplyId();
+        log.info("renderPdfSuccess: {}", GsonUtils.toJson(result));
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("render-pdf-success", result);
+        }
+    }
+
+    /**
+     * 注册客户端请求 render-print错误回调
+     *
+     * @param client electron客户端io
+     * @param result 回调参数
+     */
+    @OnEvent("render-print-error")
+    public void renderPrintError(SocketIOClient client, Result result) {
+        String replyId = result.getReplyId();
+        log.info("renderPrintError: {}", GsonUtils.toJson(result));
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("render-print-error", result);
+        }
+    }
+
+    /**
+     * 注册客户端请求 render-jpeg错误回调
+     *
+     * @param client electron客户端io
+     * @param result 回调参数
+     */
+    @OnEvent("render-jpeg-error")
+    public void renderJpegError(SocketIOClient client, Result result) {
+        String replyId = result.getReplyId();
+        log.info("renderJpegError: {}", GsonUtils.toJson(result));
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("render-jpeg-error", result);
+        }
+    }
+
+    /**
+     * 注册客户端请求 render-pdf错误回调
+     *
+     * @param client electron客户端io
+     * @param result 回调参数
+     */
+    @OnEvent("render-pdf-error")
+    public void renderPdfError(SocketIOClient client, Result result) {
+        String replyId = result.getReplyId();
+        log.info("renderPdfError: {}", GsonUtils.toJson(result));
+        if (StringUtils.isNotEmpty(replyId)) {
+            client.getNamespace().getRoomOperations(replyId).sendEvent("render-pdf-error", result);
+        }
+    }
+
     // 获取客户端
     private static String getClient(SocketIOClient c) {
         return c.getHandshakeData().getSingleUrlParam("client");
@@ -334,6 +484,7 @@ public class SocketEventHandler implements AuthTokenListener {
         String test = client.getHandshakeData().getSingleUrlParam("test");
         return StringUtils.equals(test, "true");
     }
+
     // 获取channel
     private HiPrintClient getChannel(SocketIOClient client) {
         return client.get("_channel");

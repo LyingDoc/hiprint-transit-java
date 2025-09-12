@@ -65,7 +65,7 @@ hiprint:
 2. `hiwebSocket`进行emit时对应提交事件名称(
    参考文档[docs](https://gitee.com/CcSimple/vue-plugin-hiprint/blob/main/apiDoc.md#312-render-api-%E8%8E%B7%E5%8F%96-jpegpdf%E6%89%93%E5%8D%B0))
 
-**eg:**
+**eg:（新增render类型事件回调成功、失败数据显示）**
 
    ```js
 // java对应的注册事件注解中引用对应的是emit仲提交事件名称
