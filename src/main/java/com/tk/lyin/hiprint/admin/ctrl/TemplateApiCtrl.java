@@ -1,6 +1,7 @@
 package com.tk.lyin.hiprint.admin.ctrl;
 
 import com.tk.lyin.hiprint.admin.vo.R;
+import com.tk.lyin.hiprint.admin.vo.TemplateType;
 import com.tk.lyin.hiprint.cache.AttachementCache;
 import com.tk.lyin.hiprint.cache.TemplateCache;
 import com.tk.lyin.hiprint.core.TemplateService;
@@ -46,6 +47,10 @@ public class TemplateApiCtrl extends BaseCtrl {
     @PostMapping("/load")
     public R template(HttpServletRequest request, @RequestParam String type) {
         Template template = GsonUtils.wrapDataToEntity(request, Template.class);
+        // 默认为pdf
+        if (StringUtils.isEmpty(type)) {
+            type = TemplateType.PDF.getType();
+        }
         // 默认为 pdf
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         template.setBaseUrl(baseUrl);
