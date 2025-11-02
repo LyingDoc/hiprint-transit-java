@@ -91,8 +91,6 @@ socket.emit("render-jpeg", {
 
 ### 3. 运行 `start.bat` 脚本
 
-### 如果该项目对你有所帮助，请给我一个 star，谢谢！
-
 ## 模板生成 矢量 pdf、image、html
 
 ## API {{模板载入}}
@@ -149,6 +147,8 @@ POST /api/template/load
 ```
 > eg:
 > 考虑构思每日定时清理附件生成问题，期待....
+
+### 如果该项目对你有所帮助，请给我一个 star，谢谢！
 
 ## 周边生态项目
 
