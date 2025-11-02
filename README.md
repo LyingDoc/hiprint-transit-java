@@ -123,13 +123,13 @@ POST /api/template/load
 
 | 参数名  |   类型   | 必填 |             描述             |
 |:----:|:------:|:--:|:--------------------------:|
-| type | string | 否  | 类型参数image、pdf、html（默认为pdf） |
+| type | string | 是  | 类型参数image、pdf、html（默认为pdf） |
 
 
 **Body参数**
 ```Body
 {
-  "domId": "#hiprintTemplate",    string               节点参数(type为html是，此参数比填)
+  "domId": "#hiprintTemplate",    string               节点参数(type为html是，此参数必填)
   "printData":{},                 map<string,object>   模板数据
   "template": {}                  map<string,object>   模板JSON
 }
