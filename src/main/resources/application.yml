@@ -3,7 +3,3 @@ server:
 spring:
   profiles:
     active: dev
-logging:
-  level:
-    org.xlet.hiprint: DEBUG
-    com.corundumstudio: INFO

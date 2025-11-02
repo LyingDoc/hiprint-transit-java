@@ -361,7 +361,6 @@ public class SocketEventHandler implements AuthTokenListener {
      */
     @OnEvent("success")
     public void success(SocketIOClient client, Result result) {
-        ;
         log.info("success: {}", GsonUtils.toJson(result));
         String replyId = result.getReplyId();
         if (StringUtils.isNotEmpty(replyId)) {

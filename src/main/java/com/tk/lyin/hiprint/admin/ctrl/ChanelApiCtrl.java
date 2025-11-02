@@ -1,21 +1,23 @@
-package com.tk.lyin.hiprint.admin;
+package com.tk.lyin.hiprint.admin.ctrl;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 import com.tk.lyin.hiprint.admin.vo.R;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/channels")
-public class ChanelApiController extends BaseController{
+public class ChanelApiCtrl extends BaseCtrl {
     //private final ChannelManager channelManager;
+
     private final SocketIOServer server;
+
+
 
     public R list() {
         return success();
@@ -37,4 +39,5 @@ public class ChanelApiController extends BaseController{
         server.stop();
         return success();
     }
+
 }

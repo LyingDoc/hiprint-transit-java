@@ -17,6 +17,7 @@ public class ServerConfig {
     private Integer port;
     private Boolean epoll;
     private String authToken;
+    private String active;
 
     @Bean
     public HiPrintServerFactoryBean server() {

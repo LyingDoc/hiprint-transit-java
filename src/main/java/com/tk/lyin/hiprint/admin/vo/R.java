@@ -5,6 +5,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -35,7 +36,7 @@ public class R extends LinkedHashMap<String, Object> implements Serializable {
      * @param data 数据对象
      */
     public R(int code, String msg, Object data) {
-        super.put(CODE_TAG, code);
+        super.put(CODE_TAG, Optional.of(code));
         super.put(MSG_TAG, msg);
         super.put(DATA_TAG, data);
     }

@@ -3,3 +3,4 @@ hiprint:
   port: 17521
   epoll: false
   auth-token: print_mes
+  active: /app/mes/upload

@@ -3,3 +3,4 @@ hiprint:
   port: 18521
   epoll: false
   auth-token: hiprint
+  active: D:/root/upload/files/
