@@ -121,7 +121,7 @@ POST /api/template/load
 
 | 参数名  |   类型   | 必填 |             描述             |
 |:----:|:------:|:--:|:--------------------------:|
-| type | string | 是  | 类型参数image、pdf、html（默认为pdf） |
+| type | string | 否  | 类型参数image、pdf、html（默认为pdf） |
 
 
 **Body参数**

@@ -18,6 +18,7 @@ import com.tk.lyin.hiprint.core.system.SystemContainer;
 import com.tk.lyin.hiprint.dto.AttachmentVo;
 import com.tk.lyin.hiprint.utils.string.StringUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.util.Assert;
 
@@ -42,9 +43,7 @@ public class AttachmentProvider {
         AttachmentVo attachmentVo= AttachementCache.getInstance().get(attachmentId);
         String fileName = attachmentVo.getFileName();
         Assert.hasText(fileName, "文件名不能为空!");
-        ServerConfig config = SystemContainer.getBean(ServerConfig.class);
-        Assert.notNull(config, String.format("附件配置实例载入失败!%s", ServerConfig.class.getName()));
-        String path = config.getActive();
+        String path = attachmentVo.getFilePath();
         if (StringUtils.isEmpty(path)) {
             throw new BaseException(10010, "hiprint.active 没有配置，请配置");
         }

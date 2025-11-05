@@ -2,14 +2,7 @@ package com.tk.lyin.hiprint.cache;
 
 import com.google.common.cache.*;
 import com.tk.lyin.hiprint.dto.AttachmentVo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-@Slf4j
 public class AttachementCache {
     private AttachementCache() {
     }

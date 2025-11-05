@@ -16,6 +16,7 @@ import com.tk.lyin.hiprint.utils.string.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class TemplateApiCtrl extends BaseCtrl {
 
 
     @PostMapping("/load")
-    public R template(HttpServletRequest request, @RequestParam String type) {
+    public R template(HttpServletRequest request, String type) {
         Template template = GsonUtils.wrapDataToEntity(request, Template.class);
         // 默认为pdf
         if (StringUtils.isEmpty(type)) {
