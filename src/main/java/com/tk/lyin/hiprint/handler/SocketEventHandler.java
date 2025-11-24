@@ -115,7 +115,7 @@ public class SocketEventHandler implements AuthTokenListener {
                         .build();
                 client.set("_channel", channel);
                 CLIENTS.put(token, sessionId, channel);
-                return AuthTokenResult.AuthTokenResultSuccess;
+                return AuthTokenResult.AUTH_TOKEN_RESULT_SUCCESS;
             }
         }
         return new AuthTokenResult(false, "Authentication failed");

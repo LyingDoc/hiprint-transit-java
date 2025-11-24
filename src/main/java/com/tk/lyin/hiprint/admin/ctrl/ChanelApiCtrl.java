@@ -17,8 +17,7 @@ public class ChanelApiCtrl extends BaseCtrl {
 
     private final SocketIOServer server;
 
-
-
+    @GetMapping("list")
     public R list() {
         return success();
     }

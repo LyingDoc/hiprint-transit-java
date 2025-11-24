@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.tk.lyin.hiprint.HiPrintServerFactoryBean;
 import com.tk.lyin.hiprint.handler.SocketEventHandler;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 @ConfigurationProperties(prefix = "hiprint")
@@ -20,6 +21,7 @@ public class ServerConfig {
     private String active;
 
     @Bean
+    @Primary
     public HiPrintServerFactoryBean server() {
         HiPrintServerFactoryBean factory = new HiPrintServerFactoryBean();
         factory.setEventHandler(new SocketEventHandler(authToken));

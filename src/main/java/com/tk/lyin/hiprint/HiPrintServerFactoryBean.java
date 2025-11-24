@@ -26,7 +26,7 @@ public class HiPrintServerFactoryBean extends AbstractFactoryBean<SocketIOServer
     }
 
     @Override
-    protected SocketIOServer createInstance() throws Exception {
+    protected SocketIOServer createInstance() {
         int port=serverConfig.getPort();
         String host=serverConfig.getHost();
         boolean epoll=serverConfig.getEpoll();
@@ -52,7 +52,7 @@ public class HiPrintServerFactoryBean extends AbstractFactoryBean<SocketIOServer
     }
 
     @Override
-    protected void destroyInstance(SocketIOServer instance) throws Exception {
+    protected void destroyInstance(SocketIOServer instance) {
         if (Objects.nonNull(instance)) {
             instance.stop();
         }
