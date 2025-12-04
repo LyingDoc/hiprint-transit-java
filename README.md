@@ -13,7 +13,7 @@
  <img src="https://img.shields.io/badge/Commons IO-2.21.0-blue.svg"/>
  <img src="https://img.shields.io/badge/Guava-33.5.0 jre-blue.svg"/>
  <img src="https://img.shields.io/badge/Playwright-1.56.0-blue.svg"/>
- <img src="https://img.shields.io/badge/X EasyPdf PdfBox-3.5.3-blue.svg"/>
+ <img src="https://img.shields.io/badge/X EasyPdf PdfBox-3.5.4-blue.svg"/>
  <img src="https://img.shields.io/badge/NettySocketio (Spring Boot Starter)-3.0.1-red.svg"/>
 </p>
 

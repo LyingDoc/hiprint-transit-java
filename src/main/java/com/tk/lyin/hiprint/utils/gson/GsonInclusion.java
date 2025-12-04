@@ -7,11 +7,15 @@ package com.tk.lyin.hiprint.utils.gson;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
+@Setter
 public class GsonInclusion implements ExclusionStrategy {
     private List<String> inclusionFields;
 
@@ -37,11 +41,4 @@ public class GsonInclusion implements ExclusionStrategy {
         return false;
     }
 
-    public List<String> getInclusionFields() {
-        return this.inclusionFields;
-    }
-
-    public void setInclusionFields(List<String> inclusionFields) {
-        this.inclusionFields = inclusionFields;
-    }
 }

@@ -28,6 +28,7 @@ public class DateStringConverter extends TypeAdapter<Date> {
 
     }
 
+    @Override
     public void write(JsonWriter out, Date value) throws IOException {
         if (value == null) {
             out.nullValue();
@@ -38,6 +39,7 @@ public class DateStringConverter extends TypeAdapter<Date> {
         }
     }
 
+    @Override
     public Date read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();

@@ -20,15 +20,8 @@ import java.util.Date;
 public class DateConverter extends TypeAdapter<Date> {
     private String pattern = "yyyy-MM-dd HH:mm:ss";
 
-    public DateConverter() {
-    }
 
-    public void write(JsonWriter out, Date value) throws IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value.getTime());
-        }
+    public DateConverter() {
     }
 
     public DateConverter(String pattern) {
@@ -38,7 +31,17 @@ public class DateConverter extends TypeAdapter<Date> {
 
     }
 
+    @Override
+    public void write(JsonWriter out, Date value) throws IOException {
+        if (value == null) {
+            out.nullValue();
+        } else {
+            out.value(value.getTime());
+        }
+    }
 
+
+    @Override
     public Date read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();
@@ -59,9 +62,7 @@ public class DateConverter extends TypeAdapter<Date> {
                 } else if (json.matches("\\d{2}:\\d{2}")) {
                     this.pattern = "HH:mm";
                 }
-
                 Date date = null;
-
                 try {
                     date = (new SimpleDateFormat(this.pattern)).parse(json);
                 } catch (ParseException var5) {
@@ -72,6 +73,4 @@ public class DateConverter extends TypeAdapter<Date> {
             }
         }
     }
-
-
 }

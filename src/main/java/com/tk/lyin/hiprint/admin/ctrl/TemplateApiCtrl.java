@@ -16,7 +16,6 @@ import com.tk.lyin.hiprint.utils.string.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,7 @@ public class TemplateApiCtrl extends BaseCtrl {
     private final TemplateService templateService;
 
     @GetMapping("/get")
-    public R getTemplate(HttpServletRequest request, @RequestParam String id) {
+    public R getTemplate(@RequestParam String id) {
         Template template = TemplateCache.getInstance().get(id);
         if (template == null) {
             return error("模板不存在");
@@ -92,7 +91,7 @@ public class TemplateApiCtrl extends BaseCtrl {
         AttachmentProvider.handle(id, stream -> {
             response.setContentType(vo.getFileType());
             String fileName = vo.getFileName();
-            String disposition = null;
+            String disposition;
             disposition = "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8");
             response.setHeader("Content-disposition", disposition);
             IOUtils.copy(stream, response.getOutputStream());

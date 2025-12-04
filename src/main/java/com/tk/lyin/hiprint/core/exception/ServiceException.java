@@ -1,10 +1,13 @@
 package com.tk.lyin.hiprint.core.exception;
 
+import lombok.Getter;
+
 /**
  * 业务异常
  *
  * @author thee
  */
+@Getter
 public final class ServiceException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
@@ -36,18 +39,6 @@ public final class ServiceException extends RuntimeException {
     public ServiceException(String message, Integer code) {
         this.message = message;
         this.code = code;
-    }
-
-    public String getDetailMessage() {
-        return detailMessage;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Integer getCode() {
-        return code;
     }
 
     public ServiceException setMessage(String message) {

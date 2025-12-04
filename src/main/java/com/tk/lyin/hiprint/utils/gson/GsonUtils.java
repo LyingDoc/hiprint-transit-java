@@ -1,7 +1,6 @@
 package com.tk.lyin.hiprint.utils.gson;
 
 
-import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -16,6 +15,7 @@ import com.tk.lyin.hiprint.utils.string.StringUtils;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.Date;
@@ -23,9 +23,9 @@ import java.util.Enumeration;
 
 public class GsonUtils {
 
-    private static final Gson COMMON_GSON = createGson((String[]) null, (String[]) null);
+    private static final Gson COMMON_GSON = createGson(null);
 
-    private static Gson createGson(String[] inclusionFields, String[] exclusionFields) {
+    private static Gson createGson(String[] exclusionFields) {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Date.class, new DateConverter());
         builder.registerTypeAdapter(java.sql.Date.class, new DateConverter());
@@ -34,19 +34,11 @@ public class GsonUtils {
         builder.registerTypeAdapter(Double.class, new DoubleConverter());
         builder.serializeNulls();
 
-
         if (exclusionFields != null && exclusionFields.length > 0) {
             GsonExclusion gsonFilter = new GsonExclusion();
             gsonFilter.addExclusionField(exclusionFields);
-            builder.setExclusionStrategies(new ExclusionStrategy[]{gsonFilter});
+            builder.setExclusionStrategies(gsonFilter);
         }
-
-        if (inclusionFields != null && inclusionFields.length > 0) {
-            GsonInclusion gsonFilter = new GsonInclusion();
-            gsonFilter.addInclusionFields(inclusionFields);
-            builder.setExclusionStrategies(new ExclusionStrategy[]{gsonFilter});
-        }
-
         return builder.create();
     }
 
@@ -63,7 +55,7 @@ public class GsonUtils {
         if (request != null && clazz != null) {
             Gson gson = COMMON_GSON;
             if (excludeFields != null && excludeFields.length > 0) {
-                gson = createGson((String[]) null, excludeFields);
+                gson = createGson(excludeFields);
             }
 
             String data = null;
@@ -73,7 +65,7 @@ public class GsonUtils {
                 if (inputStream != null) {
                     data = IOUtils.toString(inputStream, "utf-8");
                     if (StringUtils.isNotEmpty(data)) {
-                        request.setAttribute("_CachedInputStreamData", data.getBytes("utf-8"));
+                        request.setAttribute("_CachedInputStreamData", data.getBytes(StandardCharsets.UTF_8));
                     }
                 }
 
@@ -88,7 +80,7 @@ public class GsonUtils {
                                 return gson.fromJson(jsonObject, clazz);
                             }
 
-                            key = (String) enumeration.nextElement();
+                            key = enumeration.nextElement();
                         } while (excludeFields != null && Arrays.binarySearch(excludeFields, key) != -1);
 
                         String value = request.getParameter(key);
@@ -101,7 +93,7 @@ public class GsonUtils {
                 if (StringUtils.isEmpty(data)) {
                     Object cachedData = request.getAttribute("_CachedInputStreamData");
                     if (cachedData != null) {
-                        data = IOUtils.toString((byte[]) ((byte[]) cachedData), "utf-8");
+                        data = IOUtils.toString((byte[]) cachedData, "utf-8");
                     }
                 }
             } catch (IOException var10) {
@@ -111,13 +103,11 @@ public class GsonUtils {
             if (data == null) {
                 return null;
             } else {
-                data = data.replaceAll("(:\\[\\])|(:\\{\\})", ":null");
+                data = data.replaceAll("(:\\[])|(:\\{})", ":null");
                 return gson.fromJson(data, clazz);
             }
         } else {
             throw new InvalidParameterException("参数不能为空！");
         }
     }
-
-
 }

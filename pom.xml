@@ -24,7 +24,7 @@
         <netty-socketio.version>3.0.1</netty-socketio.version>
         <gson.version>2.13.2</gson.version>
         <playwright.version>1.56.0</playwright.version>
-        <x-easypdf.version>3.5.3</x-easypdf.version>
+        <x-easypdf.version>3.5.4</x-easypdf.version>
         <lombok.version>1.18.42</lombok.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -57,7 +57,6 @@
             <artifactId>netty-socketio-spring-boot-starter</artifactId>
             <version>${netty-socketio.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.microsoft.playwright</groupId>
             <artifactId>playwright</artifactId>

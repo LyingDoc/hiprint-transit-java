@@ -1,5 +1,6 @@
 package com.tk.lyin.hiprint.config;
 
+import com.corundumstudio.socketio.BasicConfiguration;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

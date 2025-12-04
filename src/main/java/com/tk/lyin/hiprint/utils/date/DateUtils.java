@@ -5,6 +5,7 @@
 
 package com.tk.lyin.hiprint.utils.date;
 
+import com.tk.lyin.hiprint.core.exception.BaseException;
 import org.springframework.util.Assert;
 
 import java.text.ParseException;
@@ -108,8 +109,7 @@ public class DateUtils {
                 sdf.applyPattern(pattern);
 
                 try {
-                    Date d = sdf.parse(str);
-                    return d;
+                    return sdf.parse(str);
                 } catch (ParseException var8) {
                     ++var5;
                 }
@@ -193,7 +193,7 @@ public class DateUtils {
                 calendar.add(Calendar.WEEK_OF_MONTH, count);
                 break;
             default:
-                Assert.isTrue(false, "错误的时间类型：" + type);
+                throw new BaseException("错误的时间类型：" + type);
         }
 
         return calendar.getTime();

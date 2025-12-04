@@ -1,12 +1,16 @@
 package com.tk.lyin.hiprint.admin.ctrl;
 
+import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.tk.lyin.hiprint.dto.TemplateVo;
+import com.tk.lyin.hiprint.utils.gson.GsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import com.tk.lyin.hiprint.admin.vo.R;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 @Slf4j
 @RestController
@@ -22,8 +26,10 @@ public class ChanelApiCtrl extends BaseCtrl {
         return success();
     }
 
-    @GetMapping("hello")
-    public R get(String name, HttpServletRequest request) {
+    @PostMapping("/hello")
+    public R get(HttpServletRequest request) {
+
+        Collection<SocketIOClient> clients = server.getAllClients();
         return success(request.getSession().getId());
     }
 

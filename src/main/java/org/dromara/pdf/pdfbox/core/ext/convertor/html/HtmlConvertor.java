@@ -9,17 +9,21 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.impl.driver.Driver;
 import com.microsoft.playwright.options.Margin;
 import com.microsoft.playwright.options.ScreenshotType;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -27,6 +31,8 @@ import io.netty.util.concurrent.FastThreadLocal;
 import lombok.Generated;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dromara.pdf.pdfbox.core.base.Document;
 import org.dromara.pdf.pdfbox.core.base.PageSize;
 import org.dromara.pdf.pdfbox.core.component.Image;
@@ -34,12 +40,14 @@ import org.dromara.pdf.pdfbox.core.enums.HorizontalAlignment;
 import org.dromara.pdf.pdfbox.core.enums.VerticalAlignment;
 import org.dromara.pdf.pdfbox.core.ext.convertor.AbstractConvertor;
 import org.dromara.pdf.pdfbox.handler.PdfHandler;
+import org.dromara.pdf.pdfbox.support.Constants;
+import org.dromara.pdf.pdfbox.util.IdUtil;
 import org.dromara.pdf.pdfbox.util.ImageUtil;
 import org.dromara.pdf.pdfbox.util.UnitUtil;
 
 public class HtmlConvertor extends AbstractConvertor {
-    protected static final FastThreadLocal<Page> THREAD_LOCAL = new FastThreadLocal<>();
-    protected static final ThreadPoolExecutor POOL = HtmlConvertor.DefaultThreadPool.createPool();
+    protected static final FastThreadLocal<Page> THREAD_LOCAL;
+    protected static final ThreadPoolExecutor POOL;
     protected Integer dpi;
     protected PageSize pageSize;
     protected Long requestTimeout;
@@ -63,6 +71,11 @@ public class HtmlConvertor extends AbstractConvertor {
         this.marginRight = margin;
     }
 
+    static {
+        initDriver();
+        THREAD_LOCAL = new FastThreadLocal<>();
+        POOL = HtmlConvertor.DefaultThreadPool.createPool();
+    }
     public Document toPdf(File file) {
         return this.toPdf(file.getAbsolutePath());
     }
@@ -72,10 +85,37 @@ public class HtmlConvertor extends AbstractConvertor {
         return this.convertToPdf(url);
     }
 
-    public String toHtml(String url,String domId) {
-        this.init();
-        return StringUtils.toEncodedString(convert(url, (page) -> page.querySelector(domId).innerHTML().getBytes(StandardCharsets.UTF_8)),StandardCharsets.UTF_8);
+    protected static void initDriver() {
+        try {
+            Log log = LogFactory.getLog(HtmlConvertor.class);
+            if (log.isInfoEnabled()) {
+                log.info("Initializing browser driver...");
+            }
 
+            Driver driver = Driver.ensureDriverInstalled(Collections.emptyMap(), false);
+            if (Objects.isNull(System.getProperty("x-easypdf.playwright.url"))) {
+                if (log.isInfoEnabled()) {
+                    log.info("Checking and install chromium browser...");
+                }
+
+                ProcessBuilder pb = driver.createProcessBuilder();
+                pb.command().addAll(Arrays.asList("install", "chromium", "--with-deps", "--no-shell"));
+                String version = Playwright.class.getPackage().getImplementationVersion();
+                if (version != null) {
+                    pb.environment().put("PW_CLI_DISPLAY_VERSION", version);
+                }
+
+                pb.inheritIO();
+                Process process = pb.start();
+                process.waitFor();
+            } else if (log.isInfoEnabled()) {
+                log.info("Skipped chromium browser check because remote playwright is enabled...");
+            }
+
+            System.setProperty("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "true");
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public byte[] toPdfBytes(File file) {
@@ -166,50 +206,44 @@ public class HtmlConvertor extends AbstractConvertor {
         return PdfHandler.getDocumentHandler().load(this.convertToPdfBytes(url));
     }
 
-    protected byte[] convertToPdfBytes(String url) {
-        Page.PdfOptions options = (new Page.PdfOptions()).setWidth(UnitUtil.pt2px(this.dpi, this.pageSize.getWidth()) + "px").setHeight(UnitUtil.pt2px(this.dpi, this.pageSize.getHeight()) + "px").setPrintBackground(this.isIncludeBackground).setOutline(true).setScale((double)this.scale).setLandscape(this.isLandscape).setMargin((new Margin()).setLeft(this.marginLeft + "px").setRight(this.marginRight + "px").setTop(this.marginTop + "px").setBottom(this.marginBottom + "px"));
-        return this.convert(url, (page) -> page.pdf(options));
+    public String toHtml(String url, String domId) {
+        this.init();
+        return StringUtils.toEncodedString(this.convert(url, (page) -> page.querySelector(domId).innerHTML().getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
 
     protected BufferedImage convertToImage(String url) {
         return ImageUtil.read(this.convertToImageBytes(url));
     }
 
-    protected byte[] convertToImageBytes(String url) {
-        return this.convert(url, (page) -> page.screenshot((new Page.ScreenshotOptions()).setType(ScreenshotType.PNG).setFullPage(true).setOmitBackground(true)));
+    @SneakyThrows
+    public Document toPdfWithContent(String htmlContent) {
+        this.init();
+        Path path = Paths.get(Constants.TEMP_FILE_PATH, String.join(".", IdUtil.get(), "html"));
+        Files.write(path, htmlContent.getBytes());
+
+        Document var3;
+        try {
+            var3 = this.convertToPdf(path.toAbsolutePath().toString());
+        } finally {
+            Files.deleteIfExists(path);
+        }
+        return var3;
     }
 
-    @SneakyThrows
-    protected byte[] convert(String url, Function<Page, byte[]> function) {
-        return POOL.submit(() -> {
-            long begin = 0L;
-            long end = 0L;
-            Page page = this.getBrowserPage();
-            String navigateUrl = this.getNavigateUrl(url);
-            if (this.log.isInfoEnabled()) {
-                begin = System.currentTimeMillis();
-                this.log.info("Loading page: " + navigateUrl);
-            }
-
-            page.navigate(navigateUrl);
-            page.waitForLoadState(this.pageState.getState(), (new Page.WaitForLoadStateOptions()).setTimeout((double)this.requestTimeout));
-            page.evaluate("document.fonts.ready.then(() => { window.isFontLoaded = true; });");
-            page.waitForFunction("window.isFontLoaded === true");
-            if (this.log.isInfoEnabled()) {
-                end = System.currentTimeMillis();
-                this.log.info("Loaded page: " + (end - begin) + " ms");
-                begin = end;
-                this.log.info("Converting page...");
-            }
-
-            byte[] bytes = function.apply(page);
-            if (this.log.isInfoEnabled()) {
-                end = System.currentTimeMillis();
-                this.log.info("Converted page: " + (end - begin) + " ms");
-            }
-
-            return bytes;
-        }).get(5L, TimeUnit.MINUTES);
+    protected byte[] convertToPdfBytes(String url) {
+        Page.PdfOptions options = (new Page.PdfOptions())
+                .setWidth(UnitUtil.pt2px(this.dpi, this.pageSize.getWidth()) + "px")
+                .setHeight(UnitUtil.pt2px(this.dpi, this.pageSize.getHeight()) + "px")
+                .setPrintBackground(this.isIncludeBackground)
+                .setOutline(true)
+                .setScale((double) this.scale)
+                .setLandscape(this.isLandscape)
+                .setMargin((new Margin())
+                        .setLeft(this.marginLeft + "px")
+                        .setRight(this.marginRight + "px")
+                        .setTop(this.marginTop + "px")
+                        .setBottom(this.marginBottom + "px"));
+        return this.convert(url, (page) -> page.pdf(options));
     }
 
     protected Document imageToPdf(BufferedImage sourceImage) {
@@ -242,16 +276,63 @@ public class HtmlConvertor extends AbstractConvertor {
         return page;
     }
 
+    protected byte[] convertToImageBytes(String url) {
+        return this.convert(url, (page) -> page.screenshot((new Page.ScreenshotOptions())
+                .setType(ScreenshotType.PNG)
+                .setFullPage(true)
+                .setOmitBackground(false)));
+    }
+
+    @SneakyThrows
+    protected byte[] convert(String url, Function<Page, byte[]> function) {
+        return POOL.submit(() -> {
+            long begin = 0L;
+            long end;
+            Page page = this.getBrowserPage();
+            String navigateUrl = this.getNavigateUrl(url);
+            if (this.log.isInfoEnabled()) {
+                begin = System.currentTimeMillis();
+                this.log.info("Loading page: " + navigateUrl);
+            }
+
+            page.navigate(navigateUrl);
+            page.waitForLoadState(this.pageState.getState(), (new Page.WaitForLoadStateOptions())
+                    .setTimeout((double) this.requestTimeout));
+            page.evaluate("document.fonts.ready.then(() => { window.isFontLoaded = true; });");
+            page.waitForFunction("window.isFontLoaded === true");
+            if (this.log.isInfoEnabled()) {
+                end = System.currentTimeMillis();
+                this.log.info("Loaded page: " + (end - begin) + " ms");
+                begin = end;
+                this.log.info("Converting page...");
+            }
+
+            byte[] bytes = function.apply(page);
+            if (this.log.isInfoEnabled()) {
+                end = System.currentTimeMillis();
+                this.log.info("Converted page: " + (end - begin) + " ms");
+            }
+            return bytes;
+        }).get(5L, TimeUnit.MINUTES);
+    }
+
     protected Page initBrowserPage() {
         long begin = 0L;
-        long end = 0L;
+        long end;
         if (this.log.isInfoEnabled()) {
             begin = System.currentTimeMillis();
             this.log.info("Initializing browser...");
         }
 
+        String remoteUrl = System.getProperty("x-easypdf.playwright.url");
         Playwright playwright = Playwright.create();
-        Browser browser = playwright.chromium().launch((new BrowserType.LaunchOptions()).setHeadless(true));
+        Browser browser;
+        if (Objects.isNull(remoteUrl)) {
+            browser = playwright.chromium().launch((new BrowserType.LaunchOptions()).setChannel("chromium"));
+        } else {
+            browser = playwright.chromium().connect("ws://" + remoteUrl);
+        }
+
         if (this.log.isInfoEnabled()) {
             end = System.currentTimeMillis();
             this.log.info("Initialized browser: " + (end - begin) + " ms");
@@ -262,23 +343,15 @@ public class HtmlConvertor extends AbstractConvertor {
         Page newPage = browser.newPage();
         THREAD_LOCAL.set(newPage);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            browser.close();
+            THREAD_LOCAL.remove();
             playwright.close();
-        }));
+            this.log.info("Close browser successfully");
+        }, "HtmlConvertor-ShutdownHook"));
         if (this.log.isInfoEnabled()) {
             end = System.currentTimeMillis();
             this.log.info("Initialized page: " + (end - begin) + " ms");
         }
-
         return newPage;
-    }
-
-    protected String getNavigateUrl(String url) {
-        try {
-            return Paths.get(url).toUri().toURL().toString();
-        } catch (Exception var3) {
-            return url;
-        }
     }
 
     @Generated
@@ -465,7 +538,6 @@ public class HtmlConvertor extends AbstractConvertor {
 
     @Generated
     public int hashCode() {
-        int PRIME = 59;
         int result = super.hashCode();
         Object $dpi = this.dpi;
         result = result * 59 + ($dpi == null ? 43 : $dpi.hashCode());
@@ -492,10 +564,27 @@ public class HtmlConvertor extends AbstractConvertor {
         return result;
     }
 
+    protected String getNavigateUrl(String url) {
+        try {
+            return (new URL(url)).toString();
+        } catch (MalformedURLException var3) {
+            return Paths.get(url).toUri().toString();
+        }
+    }
+
     protected static class DefaultThreadPool {
         protected static ThreadPoolExecutor createPool() {
-            int count = Runtime.getRuntime().availableProcessors() + 1;
-            return new ThreadPoolExecutor(count, count, 300L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(200), new DefaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
+            String coreSize = System.getProperty("x-easypdf.thread.core.size", "1");
+            String maxSize = System.getProperty("x-easypdf.thread.max.size", "1");
+            String keepAliveTime = System.getProperty("x-easypdf.thread.keep.alive.time", "60");
+            String queueSize = System.getProperty("x-easypdf.thread.queue.size", "2000");
+            return new ThreadPoolExecutor(Integer.parseInt(coreSize),
+                    Integer.parseInt(maxSize),
+                    Integer.parseInt(keepAliveTime),
+                    TimeUnit.SECONDS,
+                    new ArrayBlockingQueue<>(Integer.parseInt(queueSize)),
+                    new DefaultThreadFactory(),
+                    new ThreadPoolExecutor.CallerRunsPolicy());
         }
     }
 
@@ -506,9 +595,12 @@ public class HtmlConvertor extends AbstractConvertor {
         DefaultThreadFactory() {
         }
 
-        public Thread newThread( Runnable r) {
+        public Thread newThread(Runnable r) {
             String namePrefix = "playwrightPool-thread-";
-            Thread t = new DefaultThread(this.group, r, namePrefix + this.threadNumber.getAndIncrement(), 0L);
+            Thread t = new DefaultThread(this.group,
+                    r,
+                    namePrefix + this.threadNumber.getAndIncrement(),
+                    0L);
             if (t.isDaemon()) {
                 t.setDaemon(false);
             }
@@ -522,7 +614,10 @@ public class HtmlConvertor extends AbstractConvertor {
     }
 
     protected static class DefaultThread extends Thread {
-        public DefaultThread( ThreadGroup group, Runnable target,  String name, long stackSize) {
+        public DefaultThread(ThreadGroup group,
+                             Runnable target,
+                             String name,
+                             long stackSize) {
             super(group, target, name, stackSize);
         }
     }

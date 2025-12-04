@@ -70,13 +70,6 @@ public class IOUtils {
         return toString(url, Charsets.toCharset(encoding));
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public static String toString(byte[] input) throws IOException {
-        return new String(input);
-    }
 
     public static String toString(byte[] input, String encoding) throws IOException {
         return new String(input, Charsets.toCharset(encoding));

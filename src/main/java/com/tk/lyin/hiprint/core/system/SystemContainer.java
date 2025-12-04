@@ -1,5 +1,6 @@
 package com.tk.lyin.hiprint.core.system;
 
+import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemContainer implements ApplicationContextAware {
 
+    @Getter
     private static ApplicationContext applicationContext;
 
     @Override
@@ -15,10 +17,6 @@ public class SystemContainer implements ApplicationContextAware {
             SystemContainer.applicationContext = applicationContext;
         }
 
-    }
-
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     //根据名称（@Resource 注解）
