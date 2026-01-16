@@ -1,6 +1,5 @@
 package com.tk.lyin.hiprint.config;
 
-import com.corundumstudio.socketio.BasicConfiguration;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,7 +23,7 @@ public class ServerConfig {
     @Bean
     @Primary
     public HiPrintServerFactoryBean server() {
-        HiPrintServerFactoryBean factory = new HiPrintServerFactoryBean();
+        HiPrintServerFactoryBean factory = new HiPrintServerFactoryBean(this);
         factory.setEventHandler(new SocketEventHandler(authToken));
         return factory;
     }

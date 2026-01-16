@@ -1,6 +1,7 @@
 package com.tk.lyin.hiprint.core.system;
 
 import lombok.Getter;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ public class SystemContainer implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) {
         if (SystemContainer.applicationContext == null) {
             SystemContainer.applicationContext = applicationContext;
         }

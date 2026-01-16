@@ -2,7 +2,7 @@ package com.tk.lyin.hiprint.admin.ctrl;
 
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.tk.lyin.hiprint.dto.TemplateVo;
+import com.tk.lyin.hiprint.dto.PrintData;
 import com.tk.lyin.hiprint.utils.gson.GsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +43,12 @@ public class ChanelApiCtrl extends BaseCtrl {
     public R shutdown() {
         server.stop();
         return success();
+    }
+
+    @PostMapping("/printData")
+    public R printData(HttpServletRequest request) {
+        PrintData data = GsonUtils.wrapDataToEntity(request, PrintData.class);
+        return success(data);
     }
 
 }

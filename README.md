@@ -5,16 +5,16 @@
 `hiprint-transit-java` 是一个基于node-hiprint-transit与node-hiprint-pdf基底开发，用于在 `electron-hiprint` 客户端和 `vue-plugin-hiprint`
 库之间充当中转服务，实现这些组件之间的无缝连接和打印操作以及用于在 HTML、PDF、图像(PNG)中生成 vue - plugin - hiprint 打印模板的 Java 服务器。
 
-<p align="center">
- <img src="https://img.shields.io/badge/SpringBoot-2.7.18-green.svg"/>
- <img src="https://img.shields.io/badge/Java-8-blue.svg"/>
- <img src="https://img.shields.io/badge/SpringMVC-5.3.31-blue.svg"/>
- <img src="https://img.shields.io/badge/Commons Lang3-3.20.0-blue.svg"/>
- <img src="https://img.shields.io/badge/Commons IO-2.21.0-blue.svg"/>
- <img src="https://img.shields.io/badge/Guava-33.5.0 jre-blue.svg"/>
- <img src="https://img.shields.io/badge/Playwright-1.56.0-blue.svg"/>
- <img src="https://img.shields.io/badge/X EasyPdf PdfBox-3.5.4-blue.svg"/>
- <img src="https://img.shields.io/badge/NettySocketio (Spring Boot Starter)-3.0.1-red.svg"/>
+<p style="text-align: center">
+ <img src="https://img.shields.io/badge/SpringBoot-2.7.18-green.svg" alt="SpringBoot"/>
+ <img src="https://img.shields.io/badge/Java-8-blue.svg" alt="Java"/>
+ <img src="https://img.shields.io/badge/SpringMVC-5.3.31-blue.svg" alt="SpringMVC"/>
+ <img src="https://img.shields.io/badge/Commons Lang3-3.20.0-blue.svg" alt="Commons-lang3"/>
+ <img src="https://img.shields.io/badge/Commons IO-2.21.0-blue.svg" alt="Commons-io"/>
+ <img src="https://img.shields.io/badge/Guava-33.5.0 jre-blue.svg" alt="Guava"/>
+ <img src="https://img.shields.io/badge/Playwright-1.57.0-blue.svg" alt="Playwright"/>
+ <img src="https://img.shields.io/badge/X EasyPdf PdfBox-3.5.5-blue.svg" alt="EasyPdf"/>
+ <img src="https://img.shields.io/badge/NettySocketio (Spring Boot Starter)-3.0.1-red.svg" alt="NettySocketio"/>
 </p>
 
 ## 免费服务-用爱发电
@@ -53,7 +53,7 @@ hiprint:
   epoll: false
   # 服务端token
   auth-token: print_mes
-  # 附件存储路径（/root/upload/files---liunx配置）
+   # 附件存储路径（/root/upload/files---linux配置）
   active: D:/root/upload/files/
 ```
 
@@ -85,7 +85,7 @@ socket.emit("render-jpeg", {
 
 ### 1. 下载打包文件
 
-[点击下载](https://gitee.com/Xavier9896/node-hiprint-transit/blob/main/out/transit-setup-0.0.5.exe)
+[点击下载](https://gitee.com/Xavier9896/node-hiprint-transit/blob/main/out/transit-setup-0.0.6.exe)
 
 ### 2. 指定解压缩路径
 
@@ -103,7 +103,6 @@ socket.emit("render-jpeg", {
     若转换内容有缺失，可尝试调整页面加载状态
     options模板json数据缓存是两个小时； 
     附件下载与预览url缓存为永久不失效，获取到url时，务必保存，请勿丢失
-
 
 ```java
   // 初步构建html转换器时候
@@ -146,7 +145,8 @@ POST /api/template/load
 }
 ```
 > eg:
-> 考虑构思每日定时清理附件生成问题，期待....
+> 1.考虑构思每日定时清理附件生成问题
+> 2.考虑打包模式修改单模块可集成到boot中。期待....
 
 ### 如果该项目对你有所帮助，请给我一个 star，谢谢！
 

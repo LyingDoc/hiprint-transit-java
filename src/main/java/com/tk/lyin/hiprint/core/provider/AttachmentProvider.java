@@ -8,17 +8,12 @@ package com.tk.lyin.hiprint.core.provider;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.tk.lyin.hiprint.cache.AttachementCache;
-import com.tk.lyin.hiprint.config.ServerConfig;
 import com.tk.lyin.hiprint.core.exception.BaseException;
-import com.tk.lyin.hiprint.core.system.SystemContainer;
 import com.tk.lyin.hiprint.dto.AttachmentVo;
 import com.tk.lyin.hiprint.utils.string.StringUtils;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.util.Assert;
 

@@ -62,7 +62,7 @@ public class DateConverter extends TypeAdapter<Date> {
                 } else if (json.matches("\\d{2}:\\d{2}")) {
                     this.pattern = "HH:mm";
                 }
-                Date date = null;
+                Date date;
                 try {
                     date = (new SimpleDateFormat(this.pattern)).parse(json);
                 } catch (ParseException var5) {

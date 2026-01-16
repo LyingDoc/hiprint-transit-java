@@ -13,13 +13,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.util.ServerInfo;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.Strings;
 import org.apache.tomcat.util.threads.ThreadPoolExecutor;
 import com.tk.lyin.hiprint.utils.gson.GsonUtils;
 import com.tk.lyin.hiprint.utils.string.StringUtils;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -182,7 +180,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端打印机列表
      *
-     * @param client  web客户端io
+     * @param client web客户端io
      */
     @OnEvent("getClientInfo")
     public void getClientInfo(SocketIOClient client) {
@@ -194,8 +192,8 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端获取纸张信息
      *
-     * @param client       web客户端io
-     * @param printer     纸张参数
+     * @param client  web客户端io
+     * @param printer 纸张参数
      */
     @OnEvent("getPaperSizeInfo")
     public void getPaperSizeInfo(SocketIOClient client, String printer) {
@@ -207,7 +205,7 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端刷新打印机列表
      *
-     * @param client  web客户端io
+     * @param client web客户端io
      */
     @OnEvent("refreshPrinterList")
     public void refreshPrinterList(SocketIOClient client) {
@@ -219,8 +217,8 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 address
      *
-     * @param client  web客户端io
-     * @param data    地址参数集合
+     * @param client web客户端io
+     * @param data   地址参数集合
      */
     @OnEvent("address")
     public void getAddress(SocketIOClient client, Object... data) {
@@ -232,8 +230,8 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 ipp打印
      *
-     * @param client     web客户端io
-     * @param ippPrint   ipp打印参数
+     * @param client   web客户端io
+     * @param ippPrint ipp打印参数
      */
     @OnEvent("ippPrint")
     public void ippPrint(SocketIOClient client, IppPrint ippPrint) {
@@ -247,8 +245,8 @@ public class SocketEventHandler implements AuthTokenListener {
     /**
      * 注册客户端请求 ipp请求打印
      *
-     * @param client      web客户端io
-     * @param ippRequest  ippRequest 打印参数
+     * @param client     web客户端io
+     * @param ippRequest ippRequest 打印参数
      */
     @OnEvent("ippRequest")
     public void ippRequest(SocketIOClient client, IppRequest ippRequest) {
@@ -288,10 +286,11 @@ public class SocketEventHandler implements AuthTokenListener {
             client.getNamespace().getRoomOperations(replyId).sendEvent("ippPrinterCallback", packet, data);
         }
     }
+
     /**
      * 注册客户端请求 ipp请求回调
      *
-     * @param client  electron客户端io
+     * @param client electron客户端io
      * @param packet 房间参数
      * @param data   回调参数
      */

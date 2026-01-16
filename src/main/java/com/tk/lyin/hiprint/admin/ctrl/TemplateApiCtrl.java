@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URLEncoder;
 
 @Slf4j
@@ -47,7 +46,7 @@ public class TemplateApiCtrl extends BaseCtrl {
     @PostMapping("/load")
     public R template(HttpServletRequest request, String type) {
         Template template = GsonUtils.wrapDataToEntity(request, Template.class);
-        // 默认为pdf
+        // 默认为 pdf
         if (StringUtils.isEmpty(type)) {
             type = TemplateType.PDF.getType();
         }
@@ -60,7 +59,7 @@ public class TemplateApiCtrl extends BaseCtrl {
 
     @SneakyThrows
     @RequestMapping(value = {"/view"}, method = {RequestMethod.GET}, params = {"id"})
-    public void view(@RequestParam String id, HttpServletResponse response) throws IOException {
+    public void view(@RequestParam String id, HttpServletResponse response) {
         Assert.hasText(id, "附件ID不能为空！");
         AttachmentVo vo = AttachementCache.getInstance().get(id);
         Assert.notNull(vo, "ID为[" + id + "]的附件不存在或者已经被删除!");

@@ -12,19 +12,19 @@
 
     <groupId>com.tk.lyin.hiprint</groupId>
     <artifactId>hiprint-transporter</artifactId>
-    <version>2.3</version>
+    <version>2.5.5</version>
     <packaging>jar</packaging>
 
 
     <properties>
         <guava.version>33.5.0-jre</guava.version>
-        <netty.version>4.2.7.Final</netty.version>
+        <netty.version>4.2.9.Final</netty.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-io.version>2.21.0</commons-io.version>
         <netty-socketio.version>3.0.1</netty-socketio.version>
         <gson.version>2.13.2</gson.version>
-        <playwright.version>1.56.0</playwright.version>
-        <x-easypdf.version>3.5.4</x-easypdf.version>
+        <playwright.version>1.57.0</playwright.version>
+        <x-easypdf.version>3.5.5</x-easypdf.version>
         <lombok.version>1.18.42</lombok.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

@@ -3,23 +3,22 @@ package com.tk.lyin.hiprint;
 import com.corundumstudio.socketio.*;
 import com.corundumstudio.socketio.protocol.JacksonJsonSupport;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import com.tk.lyin.hiprint.config.ServerConfig;
 import com.tk.lyin.hiprint.handler.SocketEventHandler;
 
-import javax.annotation.Resource;
 import java.util.Objects;
 
 
 @Setter
+@RequiredArgsConstructor
 public class HiPrintServerFactoryBean extends AbstractFactoryBean<SocketIOServer> {
 
-    @Resource
-    private ServerConfig serverConfig;
+    private final ServerConfig serverConfig;
 
     private SocketEventHandler eventHandler;
-
 
     @Override
     public Class<?> getObjectType() {

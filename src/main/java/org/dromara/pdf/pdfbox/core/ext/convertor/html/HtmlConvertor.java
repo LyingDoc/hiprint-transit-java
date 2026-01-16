@@ -48,6 +48,7 @@ import org.dromara.pdf.pdfbox.support.Constants;
 import org.dromara.pdf.pdfbox.util.IdUtil;
 import org.dromara.pdf.pdfbox.util.ImageUtil;
 import org.dromara.pdf.pdfbox.util.UnitUtil;
+import org.jspecify.annotations.NonNull;
 
 @Setter
 @EqualsAndHashCode(callSuper = false)
@@ -399,7 +400,7 @@ public class HtmlConvertor extends AbstractConvertor {
         DefaultThreadFactory() {
         }
 
-        public Thread newThread(Runnable r) {
+        public Thread newThread(@NonNull Runnable r) {
             String namePrefix = "playwrightPool-thread-";
             Thread t = new DefaultThread(this.group,
                     r,
