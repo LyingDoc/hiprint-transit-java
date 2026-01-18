@@ -190,19 +190,6 @@ public class SocketEventHandler implements AuthTokenListener {
     }
 
     /**
-     * 注册客户端获取纸张信息
-     *
-     * @param client  web客户端io
-     * @param printer 纸张参数
-     */
-    @OnEvent("getPaperSizeInfo")
-    public void getPaperSizeInfo(SocketIOClient client, String printer) {
-        log.info("getPaperSizeInfo：{}", printer);
-        String token = client.get("token");
-        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("getPaperSizeInfo", printer);
-    }
-
-    /**
      * 注册客户端刷新打印机列表
      *
      * @param client web客户端io
@@ -212,19 +199,6 @@ public class SocketEventHandler implements AuthTokenListener {
         log.info("refreshPrinterList: {}", "打印机刷新获取中...");
         String token = client.get("token");
         client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("refreshPrinterList");
-    }
-
-    /**
-     * 注册客户端请求 address
-     *
-     * @param client web客户端io
-     * @param data   地址参数集合
-     */
-    @OnEvent("address")
-    public void getAddress(SocketIOClient client, Object... data) {
-        log.info("addressType：{}", data);
-        String token = client.get("token");
-        client.getNamespace().getRoomOperations(token + "_electron-hiprint").sendEvent("address", data);
     }
 
     /**

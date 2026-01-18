@@ -12,6 +12,7 @@ import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.impl.driver.Driver;
 import com.microsoft.playwright.options.Margin;
 import com.microsoft.playwright.options.ScreenshotType;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -248,8 +249,8 @@ public class HtmlConvertor extends AbstractConvertor {
                 .setWidth(UnitUtil.pt2px(this.dpi, this.pageSize.getWidth()) + UNIT)
                 .setHeight(UnitUtil.pt2px(this.dpi, this.pageSize.getHeight()) + UNIT)
                 .setPrintBackground(this.isIncludeBackground)
-                .setOutline(true).
-                setScale((double) this.scale)
+                .setOutline(true)
+                .setScale((double) this.scale)
                 .setLandscape(this.isLandscape)
                 .setMargin((new Margin())
                         .setLeft(this.marginLeft + UNIT)
