@@ -1,7 +1,7 @@
 package com.tk.lyin.hiprint.dto;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.socketio4j.socketio.SocketIOClient;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

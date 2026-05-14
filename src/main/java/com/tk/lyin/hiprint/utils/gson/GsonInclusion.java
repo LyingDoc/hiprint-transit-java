@@ -7,6 +7,7 @@ package com.tk.lyin.hiprint.utils.gson;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import com.tk.lyin.hiprint.utils.collect.ArrayUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,10 +23,10 @@ public class GsonInclusion implements ExclusionStrategy {
 
     public GsonInclusion addInclusionFields(String... fieldName) {
         if (this.inclusionFields == null) {
-            this.inclusionFields = new ArrayList();
+            this.inclusionFields = new ArrayList<>();
         }
 
-        if (fieldName != null && fieldName.length > 0) {
+        if (ArrayUtils.isNotEmpty(fieldName)) {
             Collections.addAll(this.inclusionFields, fieldName);
         }
 

@@ -5,6 +5,9 @@
 
 package com.tk.lyin.hiprint.utils.string;
 
+import com.tk.lyin.hiprint.utils.collect.ArrayUtils;
+import com.tk.lyin.hiprint.utils.collect.CollectionUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -12,8 +15,6 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public class StringUtils {
-    public StringUtils() {
-    }
 
     public static boolean isEmpty(String str) {
         return str == null || str.trim().isEmpty();
@@ -47,30 +48,26 @@ public class StringUtils {
     }
 
     public static boolean hasText(String... str) {
-        if (str != null && str.length != 0) {
+        if (ArrayUtils.isNotEmpty(str)) {
             for (String s : str) {
                 if (isNotEmpty(s)) {
                     return true;
                 }
             }
-            return false;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public static boolean include(String src, String... arrays) {
-        if (isNotEmpty(src)) {
+        if (isNotEmpty(src) && ArrayUtils.isNotEmpty(arrays)) {
             for (String arr : arrays) {
                 boolean isEq = equals(src, arr);
                 if (isEq) {
                     return true;
                 }
             }
-            return false;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public static boolean exclude(String src, String... arrays) {
@@ -101,6 +98,12 @@ public class StringUtils {
             buffer.append(byteToHexStr(aByteArray));
         }
         return buffer.toString();
+    }
+
+    public static String charToStr(char[] charArray) {
+        if (charArray == null) return null;
+        // 直接构造并去除两端的不可见字符（包括 \0）
+        return new String(charArray).trim();
     }
 
     public static String decodeByUTF8(String str) {
@@ -149,7 +152,7 @@ public class StringUtils {
     }
 
     public static String join(String[] value, String split) {
-        if (value != null && value.length >= 1) {
+        if (ArrayUtils.isEmpty(value)) {
             StringBuilder builder = new StringBuilder();
             for (String v : value) {
                 builder.append(split).append(v);
@@ -162,7 +165,7 @@ public class StringUtils {
     }
 
     public static String join(Collection<String> value, String split) {
-        if (value != null && !value.isEmpty()) {
+        if (CollectionUtils.isEmpty(value)) {
             StringBuilder builder = new StringBuilder();
             for (String v : value) {
                 builder.append(split).append(v);

@@ -1,7 +1,8 @@
 package com.tk.lyin.hiprint.admin.ctrl;
 
-import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIOServer;
+
+import com.socketio4j.socketio.SocketIOClient;
+import com.socketio4j.socketio.SocketIOServer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

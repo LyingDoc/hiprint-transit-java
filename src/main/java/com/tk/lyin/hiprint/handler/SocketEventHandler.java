@@ -1,12 +1,15 @@
 package com.tk.lyin.hiprint.handler;
 
-import com.corundumstudio.socketio.*;
-import com.corundumstudio.socketio.annotation.OnConnect;
-import com.corundumstudio.socketio.annotation.OnDisconnect;
-import com.corundumstudio.socketio.annotation.OnEvent;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import com.google.common.collect.Tables;
+import com.socketio4j.socketio.AuthTokenListener;
+import com.socketio4j.socketio.AuthTokenResult;
+import com.socketio4j.socketio.SocketIOClient;
+import com.socketio4j.socketio.annotation.OnConnect;
+import com.socketio4j.socketio.annotation.OnDisconnect;
+import com.socketio4j.socketio.annotation.OnEvent;
 import com.tk.lyin.hiprint.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

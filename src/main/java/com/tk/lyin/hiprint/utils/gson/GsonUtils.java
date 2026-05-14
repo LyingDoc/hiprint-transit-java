@@ -4,6 +4,7 @@ package com.tk.lyin.hiprint.utils.gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.tk.lyin.hiprint.utils.collect.ArrayUtils;
 import com.tk.lyin.hiprint.utils.gson.converter.DateConverter;
 import com.tk.lyin.hiprint.utils.gson.converter.DoubleConverter;
 import com.tk.lyin.hiprint.utils.gson.converter.FloatConverter;
@@ -34,7 +35,7 @@ public class GsonUtils {
         builder.registerTypeAdapter(Double.class, new DoubleConverter());
         builder.serializeNulls();
 
-        if (exclusionFields != null && exclusionFields.length > 0) {
+        if (ArrayUtils.isNotEmpty(exclusionFields)) {
             GsonExclusion gsonFilter = new GsonExclusion();
             gsonFilter.addExclusionField(exclusionFields);
             builder.setExclusionStrategies(gsonFilter);

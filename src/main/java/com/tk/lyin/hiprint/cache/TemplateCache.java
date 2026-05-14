@@ -4,7 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.tk.lyin.hiprint.dto.Template;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 public class TemplateCache {
     private TemplateCache() {
@@ -13,7 +13,7 @@ public class TemplateCache {
     private final static TemplateCache templateCache = new TemplateCache();
 
     private final Cache<String, Template> cache = CacheBuilder.newBuilder()
-            .expireAfterAccess(2, TimeUnit.HOURS)
+            .expireAfterAccess(Duration.ofHours(2L))
             .build();
 
     public static TemplateCache getInstance() {

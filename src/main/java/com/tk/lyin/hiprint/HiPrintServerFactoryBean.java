@@ -1,7 +1,8 @@
 package com.tk.lyin.hiprint;
 
-import com.corundumstudio.socketio.*;
-import com.corundumstudio.socketio.protocol.JacksonJsonSupport;
+import com.socketio4j.socketio.Configuration;
+import com.socketio4j.socketio.SocketIOServer;
+import com.socketio4j.socketio.protocol.JacksonJsonSupport;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -30,21 +31,17 @@ public class HiPrintServerFactoryBean extends AbstractFactoryBean<SocketIOServer
     protected SocketIOServer createInstance() {
         int port = serverConfig.getPort();
         String host = serverConfig.getHost();
-        boolean epoll = serverConfig.getEpoll();
+
 
         Configuration config = new Configuration();
         config.setHostname(host);
         config.setPort(port);
-        if (epoll) {
-            config.setUseLinuxNativeEpoll(true);
-        }
         config.getSocketConfig().setReuseAddress(true);
         config.setAllowCustomRequests(true);
         config.setEnableCors(true);
         config.setOrigin("*");
         config.setJsonSupport(new JacksonJsonSupport());
         SocketIOServer server = new SocketIOServer(config);
-        Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
         server.addListeners(eventHandler);
         server.getAllNamespaces().forEach(namespace -> namespace.addAuthTokenListener(eventHandler));
         server.start();

@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Primary;
 public class ServerConfig {
     private String host;
     private Integer port;
-    private Boolean epoll;
     private String authToken;
     private String active;
 

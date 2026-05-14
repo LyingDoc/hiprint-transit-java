@@ -122,7 +122,7 @@ public class IOUtils {
         long count = 0L;
 
         int n;
-        for (boolean var5 = false; -1 != (n = input.read(buffer)); count += (long) n) {
+        for (; -1 != (n = input.read(buffer)); count += n) {
             output.write(buffer, 0, n);
         }
 
@@ -134,13 +134,13 @@ public class IOUtils {
     }
 
     public static void copy(Reader input, OutputStream output, Charset encoding) throws IOException {
-        OutputStreamWriter out = new OutputStreamWriter(output, org.apache.commons.io.Charsets.toCharset(encoding));
+        OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(encoding));
         copy((Reader) input, (Writer) out);
         out.flush();
     }
 
     public static void copy(Reader input, OutputStream output, String encoding) throws IOException {
-        copy(input, output, org.apache.commons.io.Charsets.toCharset(encoding));
+        copy(input, output, Charsets.toCharset(encoding));
     }
 
 

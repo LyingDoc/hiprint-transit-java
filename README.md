@@ -10,11 +10,11 @@
  <img src="https://img.shields.io/badge/Java-8-blue.svg" alt="Java"/>
  <img src="https://img.shields.io/badge/SpringMVC-5.3.31-blue.svg" alt="SpringMVC"/>
  <img src="https://img.shields.io/badge/Commons Lang3-3.20.0-blue.svg" alt="Commons-lang3"/>
- <img src="https://img.shields.io/badge/Commons IO-2.21.0-blue.svg" alt="Commons-io"/>
- <img src="https://img.shields.io/badge/Guava-33.5.0 jre-blue.svg" alt="Guava"/>
- <img src="https://img.shields.io/badge/Playwright-1.57.0-blue.svg" alt="Playwright"/>
+ <img src="https://img.shields.io/badge/Commons IO-2.22.0-blue.svg" alt="Commons-io"/>
+ <img src="https://img.shields.io/badge/Guava-33.6.0 jre-blue.svg" alt="Guava"/>
+ <img src="https://img.shields.io/badge/Playwright-1.59.0-blue.svg" alt="Playwright"/>
  <img src="https://img.shields.io/badge/X EasyPdf PdfBox-3.5.5-blue.svg" alt="EasyPdf"/>
- <img src="https://img.shields.io/badge/NettySocketio (Spring Boot Starter)-3.0.1-red.svg" alt="NettySocketio"/>
+ <img src="https://img.shields.io/badge/NettySocketio (Spring Boot Starter)-4.0.0-red.svg" alt="NettySocketio"/>
 </p>
 
 ## 免费服务-用爱发电
